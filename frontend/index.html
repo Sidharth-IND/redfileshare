@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Red File Share</title>
+</head>
+<body>
+  <h2>Upload your file</h2>
+  <input type="file" id="fileInput" />
+  <button onclick="uploadFile()">Upload</button>
+  <p id="result"></p>
+
+  <script>
+    function uploadFile() {
+      const file = document.getElementById('fileInput').files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+
+      fetch('http://localhost:3000/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.url) {
+          document.getElementById('result').innerHTML = `<a href="${data.url}" target="_blank">Download Link</a>`;
+        } else {
+          document.getElementById('result').innerText = data.error;
+        }
+      });
+    }
+  </script>
+</body>
+</html>
